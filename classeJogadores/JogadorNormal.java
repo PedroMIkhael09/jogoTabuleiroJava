@@ -1,5 +1,4 @@
 package classeJogadores;
-
 import classesDados.DadoNormal;
 
 public class JogadorNormal extends Jogadores{
@@ -11,7 +10,7 @@ public class JogadorNormal extends Jogadores{
 	}
 	
 	public void jogar(){
-		this.posicaoTabuleiro = dado.jogarDados();
+		this.posicaoTabuleiro += dado.jogarDados();
 		this.jogadas++;
 	}
 	

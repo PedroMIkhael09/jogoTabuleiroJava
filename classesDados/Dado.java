@@ -1,6 +1,10 @@
 package classesDados;
 
-public interface Dado {
-	int jogarDados();
+public abstract class Dado {
+	protected int valorDado1;
+	protected int valorDado2;
+	
+	public abstract int jogarDados();
+	public abstract boolean isDadosIguais();
 }
 
