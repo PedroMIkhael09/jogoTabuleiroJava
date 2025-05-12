@@ -6,7 +6,7 @@ public class JogadorAzarado extends Jogadores{
 	public JogadorAzarado(String cor) {
 		super(cor, new DadoAzarado());
 		this.posicaoTabuleiro = 0;
-		thissssssss.jogadas = 0;
+		this.jogadas = 0;
 	}
 	
 	public void jogar(){
