@@ -18,6 +18,23 @@ public abstract class Jogadores{
 	
 	public abstract void jogar();
 	
+	public void mudarTipoJogador(Jogadores novoJogador) {
+		this.cor = novoJogador.cor;
+		this.dado = novoJogador.dado;
+		this.posicaoTabuleiro = novoJogador.posicaoTabuleiro;
+		this.jogadas = novoJogador.jogadas;
+		this.perdeProximaJogada = novoJogador.perdeProximaJogada;
+	}
+	
+	
+	// Getters and Setters
+	public int getJogadas() {
+		return jogadas;
+	}
+	
+	public Dado getDado() {
+		return dado;
+	}
 	
 	public String getCor() {
 		return cor;
