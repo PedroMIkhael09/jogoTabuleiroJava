@@ -10,7 +10,7 @@ public class JogadorAzarado extends Jogadores{
 	}
 	
 	public void jogar(){
-		this.posicaoTabuleiro = dado.jogarDados();
+		this.posicaoTabuleiro += dado.jogarDados();
 		this.jogadas++;
 	}
 }

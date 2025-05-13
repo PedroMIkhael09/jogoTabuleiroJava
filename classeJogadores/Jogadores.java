@@ -6,12 +6,14 @@ public abstract class Jogadores{
 	protected int posicaoTabuleiro;
 	protected Dado dado;
 	protected int jogadas;
-	protected boolean perdeProximaJoagada;
+	protected boolean perdeProximaJogada;
 	
 	public Jogadores(String cor, Dado dado) {
 		this.cor = cor;
 		this.posicaoTabuleiro = 0;
 		this.dado = dado;
+		this.jogadas = 0;
+		this.perdeProximaJogada = false;
 	}
 	
 	public abstract void jogar();
@@ -29,12 +31,12 @@ public abstract class Jogadores{
 		this.posicaoTabuleiro = posicaoTabuleiro;
 	}
 	
-	public boolean getPerdeProximaJoagada() {
-		return perdeProximaJoagada;
+	public boolean getPerdeProximaJogada() {
+		return perdeProximaJogada;
 	}
 	
-	public void setPerdeProximaJoagada(boolean perdeProximaJoagada) {
-		this.perdeProximaJoagada = perdeProximaJoagada;
+	public void setPerdeProximaJogada(boolean perdeProximaJogada) {
+		this.perdeProximaJogada = perdeProximaJogada;
 	}
 	
 	
