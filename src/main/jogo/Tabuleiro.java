@@ -1,15 +1,15 @@
-package src.main.game;
+package src.main.jogo;
+import src.main.jogador.Jogadores;
+import src.main.jogador.JogadorAzarado;
+import src.main.jogador.JogadorNormal;
+import src.main.jogador.JogadorSortudo;
 
-import classeJogadores.JogadorAzarado;
-import classeJogadores.JogadorNormal;
-import classeJogadores.JogadorSortudo;
-import classeJogadores.Jogadores;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Board {
+public class Tabuleiro {
 	protected ArrayList<Jogadores> jogadores;
 	private final int[] perdeRodada = {10, 25, 38};
 	private final int[] mudaTipoJogador = {13};
@@ -17,7 +17,7 @@ public class Board {
 	private final int[] casasMagicas = {20, 35};
 	
 	
-	public Board() {
+	public Tabuleiro() {
 		this.jogadores = new ArrayList<>();
 	}
 	

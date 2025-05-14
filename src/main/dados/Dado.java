@@ -1,4 +1,4 @@
-package classesDados;
+package src.main.dados;
 
 public abstract class Dado {
 	protected int valorDado1;

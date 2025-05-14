@@ -1,10 +1,13 @@
-package classeJogadores;
-import classesDados.DadoNormal;
+package src.main.jogador;
+
+
+import src.main.dados.Dado;
+import src.main.dados.DadoPadrao;
 
 public class JogadorNormal extends Jogadores{
 	
 	public JogadorNormal(String cor){
-		super(cor, new DadoNormal());
+		super(cor, new DadoPadrao());
 		this.posicaoTabuleiro = 0;
 		this.jogadas = 0;
 	}

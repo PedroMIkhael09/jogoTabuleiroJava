@@ -1,5 +1,7 @@
-package classeJogadores;
-import classesDados.DadoAzarado;
+package src.main.jogador;
+
+import src.main.dados.Dado;
+import src.main.dados.DadoAzarado;
 
 public class JogadorAzarado extends Jogadores{
 	

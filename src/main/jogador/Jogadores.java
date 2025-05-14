@@ -1,5 +1,5 @@
-package classeJogadores;
-import classesDados.Dado;
+package src.main.jogador;
+import src.main.dados.Dado;
 
 public abstract class Jogadores{
 	protected String cor;
