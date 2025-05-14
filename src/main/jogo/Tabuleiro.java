@@ -1,3 +1,5 @@
+package src.main.game;
+
 import classeJogadores.JogadorAzarado;
 import classeJogadores.JogadorNormal;
 import classeJogadores.JogadorSortudo;
@@ -5,10 +7,9 @@ import classeJogadores.Jogadores;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Random;
 import java.util.Scanner;
 
-public class Tabuleiro {
+public class Board {
 	protected ArrayList<Jogadores> jogadores;
 	private final int[] perdeRodada = {10, 25, 38};
 	private final int[] mudaTipoJogador = {13};
@@ -16,7 +17,7 @@ public class Tabuleiro {
 	private final int[] casasMagicas = {20, 35};
 	
 	
-	public Tabuleiro() {
+	public Board() {
 		this.jogadores = new ArrayList<>();
 	}
 	
