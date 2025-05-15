@@ -103,8 +103,10 @@ public class Tabuleiro {
 				System.out.println("O jogador " + jogador.getCor() + " ganhou a partida em " + jogador.getJogadas() + " rodadas!");
 				
 				System.out.println("\n--- RESUMO FINAL DOS JOGADORES ---");
-				for (Jogadores j : jogadores) {
-					System.out.println("Jogador " + j.getCor() + " - Posição: " + j.getPosicaoTabuleiro() + " - Rodadas jogadas: " + j.getJogadas());
+				for (int j = 0; j < jogadores.size(); j++) {
+					System.out.println("Jogador " + jogadores.get(j).getCor() + " - " +
+							"Posição: " + jogadores.get(j).getPosicaoTabuleiro() + " - " +
+							"Rodadas jogadas: " + jogadores.get(j).getJogadas());
 				}
 				
 				return true;
