@@ -3,14 +3,14 @@ import src.main.jogador.Jogadores;
 import src.main.jogador.JogadorAzarado;
 import src.main.jogador.JogadorNormal;
 import src.main.jogador.JogadorSortudo;
-
-
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+
 public class Tabuleiro {
 	protected ArrayList<Jogadores> jogadores;
+	private int numeroRodada = 1;
 	private final int[] perdeRodada = {10, 25, 38};
 	private final int[] mudaTipoJogador = {13};
 	private final int[] ganhaTresPosicoes = {5, 15, 30};
@@ -24,77 +24,155 @@ public class Tabuleiro {
 	public void adicionarJogadores(Jogadores j) {
 		jogadores.add(j);
 	}
-	
-	public void jogarRodada() {
-		for (int i = 0; i < jogadores.size(); i++) {
-			jogadores.get(i).jogar();
-			
-		}
+	public void limparJogadores() {
+		jogadores.clear();
 	}
 	
-	public void verificarCasaEspecial(Jogadores jogador) {
-		int posicao = jogador.getPosicaoTabuleiro();
-		
-		// Casas que fazem o jogador perder a próxima rodada
-		if (posicao == 10 || posicao == 25 || posicao == 38) {
-			jogador.setPerdeProximaJogada(true);
-		}
-		
-		// Casas que fazem com que o jogador mude de tipo
-		if (posicao == 13) {
-			Random random = new Random();
-			Scanner teclado = new Scanner(System.in);
-			
-			System.out.println("Escolha a carta surpresa: ");
-			System.out.println("Escolha entre 1, 2 ou 3");
-			int numero = teclado.nextInt();
-			
-			// Obter a cor do jogador atual
-			String corJogador = jogador.getCor();
-			
-			if (numero == 1) {
-				jogador.mudarTipoJogador(new JogadorAzarado(corJogador));
-				System.out.println("Jogador mudou para o tipo Azarado");
-			} else if (numero == 2) {
-				jogador.mudarTipoJogador(new JogadorSortudo(corJogador));
-				System.out.println("Jogador mudou para o tipo Sortudo");
-			} else if (numero == 3) {
-				jogador.mudarTipoJogador(new JogadorNormal(corJogador));
-				System.out.println("Jogador mudou para o tipo Normal");
-			}
-			
-		}
-		
-		
-		
-		//Casas em que o jogador ganha 3 posicoes, se nao for JogadorAzarado
-		if (posicao == 5 || posicao == 15 || posicao == 30) {
-			if (!(jogador instanceof JogadorAzarado)) {
-				jogador.setPosicaoTabuleiro(jogador.getPosicaoTabuleiro() + 3);
+	public boolean verificarCores(String cor) {
+		for (Jogadores j : jogadores) {
+			if (j.getCor().equalsIgnoreCase(cor)) {
+				return true;
 			}
 		}
+		return false;
+	}
+	
+	
+	public boolean jogarRodada() {
+		System.out.println("\n========= RODADA " + numeroRodada + " =========");
 		
-		//Casas magicas, troca de posição com o ultimo
-		if (posicao == 20 || posicao == 35) {
-			int posicaoUltimoJogador = -1;
-			int indiceUltimoJogador = -1;
+		for (int i = 0; i < jogadores.size(); i++) {
+			System.out.println("<------------------------------------------------->");
+			Jogadores jogador = jogadores.get(i);
 			
-			// Encontrar o jogador que está na posição mais avançada
-			for(int i = 0; i < jogadores.size(); i++) {
-				if(jogadores.get(i).getPosicaoTabuleiro() > posicaoUltimoJogador && 
-				   jogadores.get(i) != jogador) {
-					posicaoUltimoJogador = jogadores.get(i).getPosicaoTabuleiro();
-					indiceUltimoJogador = i;
+			if (jogador.getPerdeProximaJogada()) {
+				System.out.println("Jogador " + jogador.getCor() + " perdeu esta rodada!");
+				jogador.setPerdeProximaJogada(false);
+			} else {
+				int posicaoAntes = jogador.getPosicaoTabuleiro();
+				jogador.jogar();
+				int posicaoDepois = jogador.getPosicaoTabuleiro();
+				int avancou = posicaoDepois - posicaoAntes;
+				
+				System.out.println("Jogador " + jogador.getCor() +
+						" está na rodada " + jogador.getJogadas() +
+						", avançou " + avancou +
+						" casas e está agora na posição " + posicaoDepois + ".");
+				
+				verificarCasaEspecial(jogador);
+				if (verificarGanhador()) {
+					return true;
+				}
+				
+				while (jogador.getDado().isDadosIguais()) {
+					System.out.println("🎲 Jogador " + jogador.getCor() + " tirou dados iguais! Joga novamente.");
+					posicaoAntes = jogador.getPosicaoTabuleiro();
+					jogador.jogar();
+					posicaoDepois = jogador.getPosicaoTabuleiro();
+					avancou = posicaoDepois - posicaoAntes;
+					
+					System.out.println("Jogador " + jogador.getCor() +
+							" está na rodada " + jogador.getJogadas() +
+							", avançou " + avancou +
+							" casas e está agora na posição " + posicaoDepois + ".");
+					
+					verificarCasaEspecial(jogador);
+					if (verificarGanhador()) {
+						return true;
+					}
 				}
 			}
 			
-			if(indiceUltimoJogador != -1) {
-				int posicaoAtual = jogador.getPosicaoTabuleiro();
-				
-				
-				jogador.setPosicaoTabuleiro(posicaoUltimoJogador);
-				jogadores.get(indiceUltimoJogador).setPosicaoTabuleiro(posicaoAtual);
+			try {
+				Thread.sleep(3500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-		}	
+		}
+		
+		numeroRodada++;
+		return false;
 	}
+
+	public boolean verificarGanhador() {
+		for (int i = 0; i < jogadores.size(); i++) {
+			Jogadores jogador = jogadores.get(i);
+			if (jogador.getPosicaoTabuleiro() >= 40) {
+				System.out.println("O jogador " + jogador.getCor() + " ganhou a partida em " + jogador.getJogadas() + " rodadas!");
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+	private boolean contem(int valor, int[] array) {
+		for (int i : array) {
+			if (i == valor) return true;
+		}
+		return false;
+	}
+
+	public void verificarCasaEspecial(Jogadores jogador) {
+	int posicao = jogador.getPosicaoTabuleiro();
+	
+	// Casas que fazem o jogador perder a próxima rodada
+	if (contem(posicao, perdeRodada)) {
+		System.out.println("Jogador " + jogador.getCor() + " caiu na casa " + posicao + ", por isso, não joga a próxima rodada");
+		jogador.setPerdeProximaJogada(true);
+	}
+	
+	// Casas que fazem o jogador mudar de tipo
+	if (contem(posicao, mudaTipoJogador)) {
+		Scanner teclado = new Scanner(System.in);
+		System.out.println("Jogador " + jogador.getCor() + ", você terá que mudar de tipo, pois caiu na casa " + posicao + ".");
+		System.out.println("Escolha a carta surpresa (1 - Azarado, 2 - Sortudo, 3 - Normal):");
+		int numero = teclado.nextInt();
+		
+		Jogadores novoJogador = jogador.mudarTipoJogadorPara(numero);
+		int index = jogadores.indexOf(jogador);
+		jogadores.set(index, novoJogador);
+		
+		System.out.println("Jogador " + novoJogador.getCor() + " mudou para o tipo " + novoJogador.getClass().getSimpleName());
+	}
+	
+	// Casas que fazem o jogador ganhar 3 posições exceto se for JogadorAzarado
+	if (contem(posicao, ganhaTresPosicoes)) {
+		if (!(jogador instanceof JogadorAzarado)) {
+			System.out.println("Jogador " + jogador.getCor() + " ganhou 3 posições, pois caiu na casa " + posicao + ".");
+			jogador.setPosicaoTabuleiro(jogador.getPosicaoTabuleiro() + 3);
+		} else {
+			System.out.println("Jogador " + jogador.getCor() + " deveria ganhar 3 pontos extras por estar na casa " + posicao + ", mas o tipo de jogador é Azarado e por isso não ganha as 3 posições extras");
+		}
+	}
+	
+	// Casas mágicas que trocam posição com o último jogador (que está na menor posição)
+	if (contem(posicao, casasMagicas)) {
+		int posicaoUltimoJogador = Integer.MAX_VALUE;
+		int indiceUltimoJogador = -1;
+		
+		for (int i = 0; i < jogadores.size(); i++) {
+			Jogadores outroJogador = jogadores.get(i);
+			
+			if (outroJogador != jogador && outroJogador.getPosicaoTabuleiro() < posicaoUltimoJogador) {
+				posicaoUltimoJogador = outroJogador.getPosicaoTabuleiro();
+				indiceUltimoJogador = i;
+			}
+		}
+		
+		if (indiceUltimoJogador != -1) {
+			int posicaoAtual = jogador.getPosicaoTabuleiro();
+			
+			jogador.setPosicaoTabuleiro(posicaoUltimoJogador);
+			jogadores.get(indiceUltimoJogador).setPosicaoTabuleiro(posicaoAtual);
+			
+			System.out.println("Jogador " + jogador.getCor() + " caiu na casa " + posicaoAtual +
+					" e trocou de posição com o último jogador, que é o jogador " + jogadores.get(indiceUltimoJogador).getCor());
+			}
+		}
+	}
+	
 }
+
+
