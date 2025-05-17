@@ -1,67 +1,61 @@
-# 🧩 Jogo de Tabuleiro - Programação Orientada a Objetos (POO)
+🎲 Jogo de Tabuleiro - Projeto de POO em Java
+Esse projeto é um jogo de tabuleiro simples que desenvolvi para a disciplina de Programação Orientada a Objetos (POO). A ideia é simular um tabuleiro com 40 casas e até 6 jogadores, cada um com um estilo diferente: sortudo, azarado ou normal. Os jogadores avançam conforme o resultado da soma de dois dados.
 
-Este é um projeto de um jogo de tabuleiro desenvolvido em Java para a disciplina de **Programação Orientada a Objetos (POO)**. O jogo simula um tabuleiro com 40 casas e permite até **6 jogadores** com comportamentos distintos: **sortudo**, **azarado** e **normal**. Cada jogador é representado por uma cor e avança conforme o lançamento de dois dados.
+Como jogar
+Rode o arquivo Main.java.
 
-## 🎮 Como jogar
+Escolha quantos jogadores vão participar (de 2 a 6).
 
-1. **Execute o arquivo `Main.java`** 
-2. Escolha a quantidade de jogadores (mínimo 2, máximo 6).
-3. Atribua uma cor e um tipo para cada jogador.
-4. O jogo começa! A cada rodada:
-   - Os jogadores lançam dois dados.
-   - A soma determina o avanço no tabuleiro.
-   - Algumas casas têm efeitos especiais.
+Defina a cor e o tipo de cada jogador.
 
----
+O jogo começa! A cada rodada:
 
-## 🧠 Regras do jogo
+Cada jogador joga dois dados.
 
-- O tabuleiro possui **40 casas**.
-- O primeiro jogador a **chegar ou ultrapassar a casa 40 vence**.
-- Se o jogador **tirar dois dados iguais**, ele joga novamente.
-- Os efeitos especiais das casas são:
+A soma dos dados define quantas casas ele avança.
 
-| Tipo de Casa      | Casas             | Efeito |
-|-------------------|-------------------|--------|
-| 🛑 Perde rodada    | 10, 25, 38         | O jogador perde a próxima rodada. |
-| ❓ Surpresa        | 13                | O jogador muda aleatoriamente de tipo (azarado, sortudo ou normal). |
-| 🍀 Sorte           | 5, 15, 30         | O jogador (exceto azarado) avança 3 casas extras. |
-| 🔁 Retroceder outro| 17, 27            | O jogador escolhe um adversário para voltar à casa 0. |
-| 🪄 Casa mágica     | 20, 35            | Troca de posição com o jogador que estiver mais atrás (se não for o último). |
+Algumas casas especiais aplicam efeitos diferentes.
 
----
+Regras do jogo
+O tabuleiro tem 40 casas.
 
-## 🧬 Tipos de Jogadores
+Quem chegar ou passar da casa 40 primeiro vence.
 
-- **JogadorSortudo**: sempre tira soma **≥ 7**.
-- **JogadorAzarado**: sempre tira soma **≤ 6**.
-- **JogadorNormal**: tira qualquer valor possível (2 a 12).
+Se o jogador tirar dois dados iguais, ele joga de novo.
 
----
+Algumas casas têm efeitos especiais:
 
-## ⚙️ Requisitos Técnicos
+Casa	Número	Efeito
+Perde rodada	10, 25, 38	O jogador perde a próxima rodada.
+Surpresa	13	O jogador muda de tipo aleatoriamente (sortudo, azarado ou normal).
+Sorte	5, 15, 30	Jogadores que não são azarados avançam 3 casas extras.
+Retroceder adversário	17, 27	O jogador escolhe um adversário para voltar para a casa 0.
+Casa mágica	20, 35	Troca a posição com o jogador que está mais atrás (se não for o último).
 
-- Projeto feito em **Java** com uso de:
-  - **Herança** e **Polimorfismo**
-  - **Encapsulamento**
-- Arquitetura separada por pacotes (`jogo`, `jogador`, etc).
-- Utilização de **`ArrayList`** para armazenar jogadores.
-- Suporte a modo **Debug**: permite inserir manualmente a casa que o jogador irá para testes.
+Tipos de jogadores
+Sortudo: Sempre tira soma dos dados maior ou igual a 7.
 
----
+Azarado: Sempre tira soma dos dados menor ou igual a 6.
 
-## 🧪 Modo Debug
+Normal: Sorteia qualquer valor possível (2 a 12).
 
-Para fins de testes e correções, existe um modo especial chamado **Debug**, onde o usuário pode informar a casa desejada para cada jogador, ao invés de usar o valor dos dados. Isso facilita a verificação de efeitos especiais e comportamentos do jogo.
+Detalhes técnicos
+O projeto foi feito em Java, usando:
 
----
+Herança e polimorfismo para modelar os diferentes tipos de jogador.
 
-## 🏁 Final do jogo
+Encapsulamento para proteger os dados.
 
-- É mostrado o vencedor (primeiro a atingir ou ultrapassar a casa 40).
-- Exibe a quantidade de jogadas de cada jogador.
-- Exibe a posição final de todos os jogadores.
+Os jogadores são guardados numa lista (ArrayList).
 
----
+Tem um modo Debug que permite escolher manualmente a casa de destino, para facilitar testes.
 
+Modo Debug
+Nesse modo especial, você pode informar manualmente a casa para onde o jogador vai, ao invés de jogar os dados, o que ajuda muito a testar os efeitos das casas e garantir que tudo está funcionando.
 
+Final do jogo
+Mostra quem venceu (quem chegou ou passou da casa 40 primeiro).
+
+Exibe quantas jogadas cada jogador fez.
+
+Mostra a posição final de todos.
