@@ -105,7 +105,8 @@ public class Tabuleiro {
 				System.out.println("\n--- RESUMO FINAL DOS JOGADORES ---");
 				for (int j = 0; j < jogadores.size(); j++) {
 					System.out.println("Jogador " + jogadores.get(j).getCor() + " - " +
-							"Posição: " + jogadores.get(j).getPosicaoTabuleiro() + " - " +
+							"Posição : " + jogadores.get(j).getPosicaoTabuleiro() + " -" +
+							" " +
 							"Rodadas jogadas: " + jogadores.get(j).getJogadas());
 				}
 
@@ -220,15 +221,19 @@ public class Tabuleiro {
 			Jogadores jogador = jogadores.get(i);
 
 			System.out.println("É a vez do jogador " + jogador.getCor());
-
-			System.out.print("Digite o número da casa que o jogador deve ir: ");
-			int novaPosicao = teclado.nextInt();
-
-			if (novaPosicao < jogador.getPosicaoTabuleiro()) {
-				System.out.println("Não é permitido voltar casas. Tente novamente.");
-				return false;
-			}
-
+			
+			int novaPosicao;
+			do {
+				System.out.print("Digite o número da casa que o jogador deve ir: ");
+				novaPosicao = teclado.nextInt();
+				
+				if (novaPosicao < jogador.getPosicaoTabuleiro()) {
+					System.out.println("Não é permitido voltar casas. Tente novamente.");
+				}
+			} while (novaPosicao < jogador.getPosicaoTabuleiro());
+			
+			
+			
 			int posicaoAntes = jogador.getPosicaoTabuleiro();
 			jogador.setPosicaoTabuleiro(novaPosicao);
 			int avancou = novaPosicao - posicaoAntes;
