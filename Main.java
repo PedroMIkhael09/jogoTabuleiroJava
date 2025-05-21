@@ -41,32 +41,42 @@ public class Main {
 							System.out.println("Essa cor já foi escolhida. Escolha uma cor diferente.");
 						}
 					} while (tabuleiro.verificarCores(cor));
-					
-					System.out.println("Qual o tipo de jogador:");
-					System.out.println("1 - Azarado");
-					System.out.println("2 - Sortudo");
-					System.out.println("3 - Normal");
-					
-					int tipoJogador = teclado.nextInt();
-					
-					switch (tipoJogador) {
-						case 1:
-							tabuleiro.adicionarJogadores(new JogadorAzarado(cor));
-							contadorTiposJogadoresAzarado++;
-							break;
-						case 2:
-							tabuleiro.adicionarJogadores(new JogadorSortudo(cor));
-							contadorTiposJogadoresSortudo++;
-							break;
-						case 3:
-							tabuleiro.adicionarJogadores(new JogadorNormal(cor));
-							contadorTiposJogadoresNormal++;
-							break;
-						default:
-							System.out.println("Tipo inválido, tente novamente.");
-							i--;
-							break;
+
+					boolean tipoValido = false;
+					while (!tipoValido) {
+						System.out.println("Qual o tipo de jogador:");
+						System.out.println("1 - Azarado");
+						System.out.println("2 - Sortudo");
+						System.out.println("3 - Normal");
+
+						if (!teclado.hasNextInt()) {
+							System.out.println("Entrada inválida. Digite um número.");
+							teclado.next();
+							continue;
+						}
+
+						int tipoJogador = teclado.nextInt();
+						switch (tipoJogador) {
+							case 1:
+								tabuleiro.adicionarJogadores(new JogadorAzarado(cor));
+								contadorTiposJogadoresAzarado++;
+								tipoValido = true;
+								break;
+							case 2:
+								tabuleiro.adicionarJogadores(new JogadorSortudo(cor));
+								contadorTiposJogadoresSortudo++;
+								tipoValido = true;
+								break;
+							case 3:
+								tabuleiro.adicionarJogadores(new JogadorNormal(cor));
+								contadorTiposJogadoresNormal++;
+								tipoValido = true;
+								break;
+							default:
+								System.out.println("Tipo inválido, tente novamente.");
+						}
 					}
+
 				}
 				
 				int tiposDiferentes = 0;
@@ -88,12 +98,56 @@ public class Main {
 				
 				
 				break;
-			
+
 			case 2:
 				System.out.println("Modo Debug selecionado");
-				// implementar modo debug
+				System.out.println("Quantas pessoas irão jogar? Mínimo de 2 e máximo de 6 pessoas.");
+				int qtdPessoasDebug = teclado.nextInt();
+
+				if (qtdPessoasDebug < 2 || qtdPessoasDebug > 6) {
+					System.out.println("Número inválido de jogadores. Tente novamente.");
+					break;
+				}
+
+				for (int i = 0; i < qtdPessoasDebug; i++) {
+					String cor;
+					do {
+						System.out.println("Digite a cor do jogador " + (i + 1) + ":");
+						cor = teclado.next();
+						if (tabuleiro.verificarCores(cor)) {
+							System.out.println("Essa cor já foi escolhida. Escolha uma cor diferente.");
+						}
+					} while (tabuleiro.verificarCores(cor));
+
+					System.out.println("Qual o tipo de jogador:");
+					System.out.println("1 - Azarado");
+					System.out.println("2 - Sortudo");
+					System.out.println("3 - Normal");
+
+					int tipoJogador = teclado.nextInt();
+
+					switch (tipoJogador) {
+						case 1:
+							tabuleiro.adicionarJogadores(new JogadorAzarado(cor));
+							break;
+						case 2:
+							tabuleiro.adicionarJogadores(new JogadorSortudo(cor));
+							break;
+						case 3:
+							tabuleiro.adicionarJogadores(new JogadorNormal(cor));
+							break;
+						default:
+							System.out.println("Tipo inválido, tente novamente.");
+							i--;
+							break;
+					}
+				}
+
+				boolean jogoFinalizadoDebug = false;
+				while (!jogoFinalizadoDebug) {
+					jogoFinalizadoDebug = tabuleiro.jogarRodadaDebug(teclado);
+				}
 				break;
-			
 			default:
 				System.out.println("Número inválido. Tente novamente.");
 		}

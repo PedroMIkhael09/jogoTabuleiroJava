@@ -2,7 +2,7 @@ package src.main.dados;
 import java.util.Random;
 
 public class DadoSortudo extends Dado {
-	private Random random = new Random();
+	private final Random random = new Random();
 	
 	@Override
 	public int jogarDados() {
@@ -12,9 +12,6 @@ public class DadoSortudo extends Dado {
 		} while ((valorDado1 + valorDado2) <= 7);
 		return valorDado1 + valorDado2;
 	}
-	
-	@Override
-	public boolean isDadosIguais() {
-		return valorDado1 == valorDado2;
-	}
+
+
 }
