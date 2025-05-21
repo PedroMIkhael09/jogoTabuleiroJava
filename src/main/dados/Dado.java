@@ -5,6 +5,8 @@ public abstract class Dado {
 	protected int valorDado2;
 	
 	public abstract int jogarDados();
-	public abstract boolean isDadosIguais();
+	public boolean isDadosIguais() {
+		return valorDado1 == valorDado2;
+	}
 }
 
