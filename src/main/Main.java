@@ -1,3 +1,4 @@
+package src.main;
 
 import src.main.jogo.Tabuleiro;
 import src.main.jogador.JogadorAzarado;
