@@ -52,7 +52,7 @@ public class Tabuleiro {
 				jogador.setPerdeProximaJogada(false);
 			} else {
 				int posicaoAntes = jogador.getPosicaoTabuleiro();
-				jogador.jogar();
+				jogador.atualizarJogador();
 				int posicaoDepois = jogador.getPosicaoTabuleiro();
 				int avancou = posicaoDepois - posicaoAntes;
 
@@ -66,10 +66,10 @@ public class Tabuleiro {
 					return true;
 				}
 
-				while (jogador.getDado().isDadosIguais()) {
+				while (jogador.verificarDadosIguais()) {
 					System.out.println("🎲 Jogador " + jogador.getCor() + " tirou dados iguais! Joga novamente.");
 					posicaoAntes = jogador.getPosicaoTabuleiro();
-					jogador.jogar();
+					jogador.atualizarJogador();
 					posicaoDepois = jogador.getPosicaoTabuleiro();
 					avancou = posicaoDepois - posicaoAntes;
 
