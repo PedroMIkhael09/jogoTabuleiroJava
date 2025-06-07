@@ -1,24 +1,26 @@
 package src.main.jogador;
-import src.main.dados.Dado;
 
 public abstract class Jogadores{
 	protected String cor;
 	protected int posicaoTabuleiro;
-	protected Dado dado;
+	protected int valorDado1;
+	protected int valorDado2;
 	protected int jogadas;
 	protected boolean perdeProximaJogada;
 	
-	public Jogadores(String cor, Dado dado) {
+	public Jogadores(String cor) {
 		this.cor = cor;
 		this.posicaoTabuleiro = 0;
-		this.dado = dado;
 		this.jogadas = 0;
 		this.perdeProximaJogada = false;
 	}
 
-	public void jogar() {
-		this.posicaoTabuleiro += dado.jogarDados();
-		this.jogadas++;
+	public abstract int jogarDados();
+	
+	public abstract void atualizarJogador();
+	
+	public boolean verificarDadosIguais(){
+		return valorDado1 == valorDado2;
 	}
 
 	public Jogadores mudarTipoJogadorPara(int tipo) {
@@ -49,9 +51,6 @@ public abstract class Jogadores{
 	}
 	public void setJogadas(int jogadas) {
 		this.jogadas = jogadas;
-	}
-	public Dado getDado() {
-		return dado;
 	}
 	
 	public String getCor() {
