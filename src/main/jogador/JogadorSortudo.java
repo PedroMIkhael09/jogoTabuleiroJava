@@ -2,7 +2,6 @@ package src.main.jogador;
 import java.util.Random;
 
 public class JogadorSortudo extends Jogadores {
-	private final Random random = new Random();
 	
 	public JogadorSortudo(String cor){
 		super(cor);
@@ -10,8 +9,8 @@ public class JogadorSortudo extends Jogadores {
 	
 	public int jogarDados(){
 		do {
-			this.valorDado1 = random.nextInt(6) + 1;
-			this.valorDado2 = random.nextInt(6) + 1;
+			this.valorDado1 = RANDOM.nextInt(6) + 1;
+			this.valorDado2 = RANDOM.nextInt(6) + 1;
 		} while ((valorDado1 + valorDado2) <= 7);
 		return valorDado1 + valorDado2;
 	}

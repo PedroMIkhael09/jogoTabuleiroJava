@@ -1,4 +1,5 @@
 package src.main.jogador;
+import java.util.Random;
 
 public abstract class Jogadores{
 	protected String cor;
@@ -7,6 +8,7 @@ public abstract class Jogadores{
 	protected int valorDado2;
 	protected int jogadas;
 	protected boolean perdeProximaJogada;
+	protected static final Random RANDOM = new Random();
 	
 	public Jogadores(String cor) {
 		this.cor = cor;

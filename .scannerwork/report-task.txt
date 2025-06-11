@@ -2,5 +2,5 @@ projectKey=jogoTabuleiroJava
 serverUrl=http://localhost:9000
 serverVersion=25.6.0.109173
 dashboardUrl=http://localhost:9000/dashboard?id=jogoTabuleiroJava
-ceTaskId=42d7d098-3753-4129-8a26-faed14721908
-ceTaskUrl=http://localhost:9000/api/ce/task?id=42d7d098-3753-4129-8a26-faed14721908
+ceTaskId=dabe27ee-6df8-4902-b7b6-38187c87ecc5
+ceTaskUrl=http://localhost:9000/api/ce/task?id=dabe27ee-6df8-4902-b7b6-38187c87ecc5
