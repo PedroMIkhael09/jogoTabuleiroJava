@@ -16,7 +16,7 @@ public class TabuleiroConsole {
 	}
 	
 	public void jogar() {
-		System.out.println("Seja bem-vindo ao jogo de Tabuleiro!!");
+		System.out.println("Seja bem-vindo ao jogo de Tabuleiro!!"); //NOSONAR
 		
 		int modo = selecionarModo();
 		if (modo == 1 || modo == 2) {
@@ -32,26 +32,26 @@ public class TabuleiroConsole {
 	}
 	
 	private int selecionarModo() {
-		System.out.println("Escolha o modo de jogo:");
-		System.out.println("1 - Modo Normal");
-		System.out.println("2 - Modo Debug");
+		System.out.println("Escolha o modo de jogo:"); //NOSONAR
+		System.out.println("1 - Modo Normal"); //NOSONAR
+		System.out.println("2 - Modo Debug"); //NOSONAR
 		
 		while (!teclado.hasNextInt()) {
-			System.out.println("Entrada inválida. Digite 1 ou 2.");
+			System.out.println("Entrada inválida. Digite 1 ou 2."); //NOSONAR
 			teclado.next();
 		}
 		
 		int modo = teclado.nextInt();
 		if (modo != 1 && modo != 2) {
-			System.out.println("Número inválido. Tente novamente.");
+			System.out.println("Número inválido. Tente novamente."); //NOSONAR
 			return -1;
 		}
 		return modo;
 	}
 	
 	private boolean iniciarJogo(int modo) {
-		System.out.println(modo == 1 ? "Modo Normal selecionado" : "Modo Debug selecionado");
-		System.out.println("Quantas pessoas irão jogar? Mínimo de 2 e máximo de 6 pessoas.");
+		System.out.println(modo == 1 ? "Modo Normal selecionado" : "Modo Debug selecionado"); //NOSONAR
+		System.out.println("Quantas pessoas irão jogar? Mínimo de 2 e máximo de 6 pessoas."); //NOSONAR
 		
 		int qtdJogadores;
 		while (true) {
@@ -60,8 +60,8 @@ public class TabuleiroConsole {
 			if (qtdJogadores >= 2 && qtdJogadores <= 6) {
 					break;
 			} else {
-					System.out.println("Número inválido de jogadores. Digite um número entre 2 e 6.");
-				System.out.println("Por favor, digite um número válido.");
+					System.out.println("Número inválido de jogadores. Digite um número entre 2 e 6."); //NOSONAR
+				System.out.println("Por favor, digite um número válido."); //NOSONAR
 			}
 		}
 		
@@ -102,10 +102,10 @@ public class TabuleiroConsole {
 	private String selecionarCor(int indiceJogador) {
 		String cor;
 		do {
-			System.out.println("Digite a cor do jogador " + (indiceJogador + 1) + ":");
+			System.out.println("Digite a cor do jogador " + (indiceJogador + 1) + ":"); //NOSONAR
 			cor = teclado.next().toLowerCase();
 			if (tabuleiro.verificarCores(cor)) {
-				System.out.println("Essa cor já foi escolhida. Escolha uma cor diferente.");
+				System.out.println("Essa cor já foi escolhida. Escolha uma cor diferente."); //NOSONAR
 			}
 		} while (tabuleiro.verificarCores(cor));
 		return cor;
@@ -114,19 +114,19 @@ public class TabuleiroConsole {
 	private int selecionarTipoJogador() {
 		int tipoJogador;
 		do {
-			System.out.println("Qual o tipo de jogador:");
-			System.out.println("1 - Azarado");
-			System.out.println("2 - Sortudo");
-			System.out.println("3 - Normal");
+			System.out.println("Qual o tipo de jogador:"); //NOSONAR
+			System.out.println("1 - Azarado"); //NOSONAR
+			System.out.println("2 - Sortudo"); //NOSONAR
+			System.out.println("3 - Normal"); //NOSONAR
 			
 			while (!teclado.hasNextInt()) {
-				System.out.println("Entrada inválida. Digite um número.");
+				System.out.println("Entrada inválida. Digite um número."); //NOSONAR
 				teclado.next();
 			}
 			
 			tipoJogador = teclado.nextInt();
 			if (tipoJogador < 1 || tipoJogador > 3) {
-				System.out.println("Tipo inválido, tente novamente.");
+				System.out.println("Tipo inválido, tente novamente."); //NOSONAR
 			}
 		} while (tipoJogador < 1 || tipoJogador > 3);
 		return tipoJogador;
@@ -139,7 +139,7 @@ public class TabuleiroConsole {
 		if (normais > 0) tiposDiferentes++;
 		
 		if (tiposDiferentes < 2) {
-			System.out.println("Erro: O jogo precisa de pelo menos dois tipos diferentes de jogadores.");
+			System.out.println("Erro: O jogo precisa de pelo menos dois tipos diferentes de jogadores."); //NOSONAR
 			tabuleiro.limparJogadores();
 			return false;
 		}

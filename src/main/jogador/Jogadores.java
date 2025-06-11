@@ -35,7 +35,8 @@ public abstract class Jogadores{
             case 2 -> novoJogador = new JogadorSortudo(this.cor);
             case 3 -> novoJogador = new JogadorNormal(this.cor);
             default -> {
-                System.out.println("Tipo inválido para mudança.");               return this;
+                System.out.println("Tipo inválido para mudança."); //NOSONAR
+				 return this;
             }
         }
 
