@@ -1,5 +1,4 @@
 package src.main.jogador;
-import java.util.Random;
 
 public class JogadorAzarado extends Jogadores{
 	

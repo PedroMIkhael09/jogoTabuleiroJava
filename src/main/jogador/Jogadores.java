@@ -1,6 +1,7 @@
 package src.main.jogador;
 import java.util.Random;
 
+
 public abstract class Jogadores{
 	protected String cor;
 	protected int posicaoTabuleiro;
@@ -8,7 +9,8 @@ public abstract class Jogadores{
 	protected int valorDado2;
 	protected int jogadas;
 	protected boolean perdeProximaJogada;
-	protected static final Random RANDOM = new Random();
+	@SuppressWarnings("java:S2245")
+	protected static final Random RANDOM = new Random(); //NOSONAR
 	
 	public Jogadores(String cor) {
 		this.cor = cor;
@@ -33,8 +35,7 @@ public abstract class Jogadores{
             case 2 -> novoJogador = new JogadorSortudo(this.cor);
             case 3 -> novoJogador = new JogadorNormal(this.cor);
             default -> {
-                System.out.println("Tipo inválido para mudança.");
-                return this;
+                System.out.println("Tipo inválido para mudança.");               return this;
             }
         }
 
