@@ -15,10 +15,19 @@ public class Tabuleiro {
 	private final int[] ganhaTresPosicoes = {5, 15, 30};
 	private final int[] casasMagicas = {20, 35};
 	private final int[] retrocederOutro = {17, 27};
+	private static Tabuleiro instancia;
 
 
-	public Tabuleiro() {
+	private Tabuleiro() {
 		this.jogadores = new ArrayList<>();
+	}
+	
+	//PADRAO SINGLETON
+	public static Tabuleiro getInstacia() {
+		if (instancia == null) {
+			instancia = new Tabuleiro();
+		}
+		return instancia;
 	}
 
 	public void adicionarJogadores(Jogadores j) {

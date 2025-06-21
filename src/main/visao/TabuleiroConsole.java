@@ -11,7 +11,7 @@ public class TabuleiroConsole {
 	private final Scanner teclado;
 	
 	public TabuleiroConsole() {
-		this.tabuleiro = new Tabuleiro();
+		this.tabuleiro = Tabuleiro.getInstacia();
 		this.teclado = new Scanner(System.in);
 	}
 	
