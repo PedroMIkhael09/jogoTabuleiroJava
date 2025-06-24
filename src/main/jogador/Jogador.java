@@ -2,7 +2,7 @@ package src.main.jogador;
 import java.util.Random;
 
 
-public abstract class Jogadores{
+public abstract class Jogador {
 	protected String cor;
 	protected int posicaoTabuleiro;
 	protected int valorDado1;
@@ -11,8 +11,9 @@ public abstract class Jogadores{
 	protected boolean perdeProximaJogada;
 	@SuppressWarnings("java:S2245")
 	protected static final Random RANDOM = new Random(); //NOSONAR
+	protected boolean jogaDeNovo = false;
 	
-	public Jogadores(String cor) {
+	public Jogador(String cor) {
 		this.cor = cor;
 		this.posicaoTabuleiro = 0;
 		this.jogadas = 0;
@@ -27,8 +28,8 @@ public abstract class Jogadores{
 		return valorDado1 == valorDado2;
 	}
 
-	public Jogadores mudarTipoJogadorPara(int tipo) {
-		Jogadores novoJogador;
+	public Jogador mudarTipoJogadorPara(int tipo) {
+		Jogador novoJogador;
 
         switch (tipo) {
             case 1 -> novoJogador = new JogadorAzarado(this.cor);
@@ -77,5 +78,12 @@ public abstract class Jogadores{
 		this.perdeProximaJogada = perdeProximaJogada;
 	}
 	
+	public boolean getJogaDeNovo() {
+		return jogaDeNovo;
+	}
+	
+	public void setJogaDeNovo(boolean jogaDeNovo) {
+		this.jogaDeNovo = jogaDeNovo;
+	}
 	
 }

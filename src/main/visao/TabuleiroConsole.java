@@ -1,12 +1,13 @@
 package src.main.visao;
 
 import src.main.jogo.Tabuleiro;
-import src.main.jogador.JogadorAzarado;
-import src.main.jogador.JogadorNormal;
-import src.main.jogador.JogadorSortudo;
+import src.main.mensagem.EfeitoDaCasa;
+
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class TabuleiroConsole {
+	
 	private final Tabuleiro tabuleiro;
 	private final Scanner teclado;
 	
@@ -16,7 +17,7 @@ public class TabuleiroConsole {
 	}
 	
 	public void jogar() {
-		System.out.println("Seja bem-vindo ao jogo de Tabuleiro!!"); //NOSONAR
+		exibirMensagem("Seja bem-vindo ao jogo de Tabuleiro!!");
 		
 		int modo = selecionarModo();
 		if (modo == 1 || modo == 2) {
@@ -32,37 +33,61 @@ public class TabuleiroConsole {
 	}
 	
 	private int selecionarModo() {
-		System.out.println("Escolha o modo de jogo:"); //NOSONAR
-		System.out.println("1 - Modo Normal"); //NOSONAR
-		System.out.println("2 - Modo Debug"); //NOSONAR
+		exibirMensagem("Escolha o modo de jogo:");
+		exibirMensagem("1 - Modo Normal");
+		exibirMensagem("2 - Modo Debug");
 		
-		while (!teclado.hasNextInt()) {
-			System.out.println("Entrada inválida. Digite 1 ou 2."); //NOSONAR
-			teclado.next();
+		while (true) {
+			int entrada = lerInt("Digite 1 ou 2: ");
+			if (entrada == 1 || entrada == 2) {
+				return entrada;
+			}
+			exibirMensagem("Número inválido. Tente novamente.");
 		}
+	}
+	
+	public boolean montarTabuleiro(int qtdCasas) {
+		exibirMensagem("Vamos montar o tabuleiro com " + qtdCasas + " casas!");
+		imprimirDescricaoDasCasas();
 		
-		int modo = teclado.nextInt();
-		if (modo != 1 && modo != 2) {
-			System.out.println("Número inválido. Tente novamente."); //NOSONAR
-			return -1;
+		for (int i = 0; i < qtdCasas; i++) {
+			int escolhaTabuleiro = -1;
+			while (true) {
+				escolhaTabuleiro = lerInt("\nDeseja colocar algo específico na casa " + (i + 1) +
+						"? Digite o número correspondente (0-7): ");
+				if (escolhaTabuleiro >= 0 && escolhaTabuleiro <= 7) {
+					break;
+				}
+				exibirMensagem("Número inválido! Digite um valor entre 0 e 7.");
+			}
+			tabuleiro.adicionarCasa(escolhaTabuleiro, i + 1);
+			exibirMensagem("Casa " + (i + 1) + " adicionada ao tabuleiro!");
 		}
-		return modo;
+		return true;
+	}
+	
+	private void imprimirDescricaoDasCasas() {
+		exibirMensagem("0. Casa Simples: Não aplica nenhuma regra especial");
+		exibirMensagem("1. Casa Prisão: Jogador perde a próxima rodada");
+		exibirMensagem("2. Casa Surpresa: Jogador tira carta aleatória que muda seu tipo conforme a carta");
+		exibirMensagem("3. Casa Sorte: Avança 3 casas, exceto se for jogador Azarado");
+		exibirMensagem("4. Casa Reversa: Troca posição com o último jogador");
+		exibirMensagem("5. Casa Retroceder: Envia um adversário para a casa 0");
+		exibirMensagem("6. Casa JogaDeNovo: Rola os dados novamente");
+		exibirMensagem("7. Casa Azar: Volta 3 casas, exceto se for Jogador Sortudo");
 	}
 	
 	private boolean iniciarJogo(int modo) {
-		System.out.println(modo == 1 ? "Modo Normal selecionado" : "Modo Debug selecionado"); //NOSONAR
-		System.out.println("Quantas pessoas irão jogar? Mínimo de 2 e máximo de 6 pessoas."); //NOSONAR
+		exibirMensagem(modo == 1 ? "Modo Normal selecionado" : "Modo Debug selecionado");
+		exibirMensagem("Quantas pessoas irão jogar? Mínimo de 2 e máximo de 6 pessoas.");
 		
 		int qtdJogadores;
 		while (true) {
-			
-			qtdJogadores = teclado.nextInt();
+			qtdJogadores = lerInt("");
 			if (qtdJogadores >= 2 && qtdJogadores <= 6) {
-					break;
-			} else {
-					System.out.println("Número inválido de jogadores. Digite um número entre 2 e 6."); //NOSONAR
-				System.out.println("Por favor, digite um número válido."); //NOSONAR
+				break;
 			}
+			exibirMensagem("Número inválido de jogadores. Digite um número entre 2 e 6.");
 		}
 		
 		return configurarJogadores(qtdJogadores);
@@ -77,22 +102,12 @@ public class TabuleiroConsole {
 			String cor = selecionarCor(i);
 			int tipoJogador = selecionarTipoJogador();
 			
+			tabuleiro.adicionarJogador(tipoJogador, cor);
+			
 			switch (tipoJogador) {
-				case 1:
-					tabuleiro.adicionarJogadores(new JogadorAzarado(cor));
-					contadorAzarados++;
-					break;
-				case 2:
-					tabuleiro.adicionarJogadores(new JogadorSortudo(cor));
-					contadorSortudos++;
-					break;
-				case 3:
-					tabuleiro.adicionarJogadores(new JogadorNormal(cor));
-					contadorNormais++;
-					break;
-				
-				default:
-					break;
+				case 1 -> contadorAzarados++;
+				case 2 -> contadorSortudos++;
+				case 3 -> contadorNormais++;
 			}
 		}
 		
@@ -102,34 +117,28 @@ public class TabuleiroConsole {
 	private String selecionarCor(int indiceJogador) {
 		String cor;
 		do {
-			System.out.println("Digite a cor do jogador " + (indiceJogador + 1) + ":"); //NOSONAR
-			cor = teclado.next().toLowerCase();
+			cor = lerString("Digite a cor do jogador " + (indiceJogador + 1) + ": ").toLowerCase();
 			if (tabuleiro.verificarCores(cor)) {
-				System.out.println("Essa cor já foi escolhida. Escolha uma cor diferente."); //NOSONAR
+				exibirMensagem("Essa cor já foi escolhida. Escolha uma cor diferente.");
+				cor = null;
 			}
-		} while (tabuleiro.verificarCores(cor));
+		} while (cor == null || cor.isBlank());
 		return cor;
 	}
 	
 	private int selecionarTipoJogador() {
-		int tipoJogador;
-		do {
-			System.out.println("Qual o tipo de jogador:"); //NOSONAR
-			System.out.println("1 - Azarado"); //NOSONAR
-			System.out.println("2 - Sortudo"); //NOSONAR
-			System.out.println("3 - Normal"); //NOSONAR
-			
-			while (!teclado.hasNextInt()) {
-				System.out.println("Entrada inválida. Digite um número."); //NOSONAR
-				teclado.next();
+		exibirMensagem("Qual o tipo de jogador:");
+		exibirMensagem("1 - Azarado");
+		exibirMensagem("2 - Sortudo");
+		exibirMensagem("3 - Normal");
+		
+		while (true) {
+			int tipoJogador = lerInt("");
+			if (tipoJogador >= 1 && tipoJogador <= 3) {
+				return tipoJogador;
 			}
-			
-			tipoJogador = teclado.nextInt();
-			if (tipoJogador < 1 || tipoJogador > 3) {
-				System.out.println("Tipo inválido, tente novamente."); //NOSONAR
-			}
-		} while (tipoJogador < 1 || tipoJogador > 3);
-		return tipoJogador;
+			exibirMensagem("Tipo inválido, tente novamente.");
+		}
 	}
 	
 	private boolean verificarTiposJogadores(int azarados, int sortudos, int normais) {
@@ -139,11 +148,17 @@ public class TabuleiroConsole {
 		if (normais > 0) tiposDiferentes++;
 		
 		if (tiposDiferentes < 2) {
-			System.out.println("Erro: O jogo precisa de pelo menos dois tipos diferentes de jogadores."); //NOSONAR
+			exibirMensagem("Erro: O jogo precisa de pelo menos dois tipos diferentes de jogadores.");
 			tabuleiro.limparJogadores();
 			return false;
 		}
 		return true;
+	}
+	
+	public static void exibirMensagem(EfeitoDaCasa efeito) {
+		if (efeito != null && efeito.getMensagem() != null && !efeito.getMensagem().isEmpty()) {
+			System.out.println(efeito.getMensagem());
+		}
 	}
 	
 	private void executarModoNormal() {
@@ -158,5 +173,32 @@ public class TabuleiroConsole {
 		while (!jogoFinalizado) {
 			jogoFinalizado = tabuleiro.jogarRodadaDebug(teclado);
 		}
+	}
+	
+	// Métodos utilitários para leitura de dados e mensagens
+	
+	private int lerInt(String mensagem) {
+		while (true) {
+			if (!mensagem.isEmpty()) {
+				System.out.print(mensagem);
+			}
+			try {
+				int valor = teclado.nextInt();
+				teclado.nextLine(); // consumir quebra de linha
+				return valor;
+			} catch (InputMismatchException e) {
+				exibirMensagem("Entrada inválida! Digite um número inteiro.");
+				teclado.nextLine(); // limpar buffer
+			}
+		}
+	}
+	
+	private String lerString(String mensagem) {
+		System.out.print(mensagem);
+		return teclado.nextLine();
+	}
+	
+	private void exibirMensagem(String mensagem) {
+		System.out.println(mensagem);
 	}
 }

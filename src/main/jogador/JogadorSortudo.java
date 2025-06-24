@@ -1,7 +1,7 @@
 package src.main.jogador;
 
 
-public class JogadorSortudo extends Jogadores {
+public class JogadorSortudo extends Jogador {
 	
 	public JogadorSortudo(String cor){
 		super(cor);

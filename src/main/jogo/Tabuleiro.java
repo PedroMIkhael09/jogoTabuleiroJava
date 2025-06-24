@@ -1,45 +1,54 @@
 package src.main.jogo;
-import src.main.jogador.Jogadores;
-import src.main.jogador.JogadorAzarado;
+
+import src.main.casas.Casa;
+import src.main.casas.CasaRetroceder;
+import src.main.casas.CasaReversa;
+import src.main.casas.CasaSurpresa;
+import src.main.factory.CasaFactory;
+import src.main.factory.JogadorFactory;
+import src.main.jogador.Jogador;
+import src.main.mensagem.EfeitoDaCasa;
+import src.main.visao.TabuleiroConsole;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Scanner;
 
-
 public class Tabuleiro {
-	protected ArrayList<Jogadores> jogadores;
+	protected ArrayList<Jogador> jogadores;
+	protected ArrayList<Casa> casas;
 	private int numeroRodada = 1;
-	private final int[] perdeRodada = {10, 25, 38};
-	private final int[] mudaTipoJogador = {13};
-	private final int[] ganhaTresPosicoes = {5, 15, 30};
-	private final int[] casasMagicas = {20, 35};
-	private final int[] retrocederOutro = {17, 27};
 	private static Tabuleiro instancia;
-
-
+	private Scanner teclado = new Scanner(System.in);
+	
 	private Tabuleiro() {
 		this.jogadores = new ArrayList<>();
+		this.casas = new ArrayList<>();
 	}
 	
-	//PADRAO SINGLETON
 	public static Tabuleiro getInstacia() {
 		if (instancia == null) {
 			instancia = new Tabuleiro();
 		}
 		return instancia;
 	}
-
-	public void adicionarJogadores(Jogadores j) {
-		jogadores.add(j);
+	
+	public void adicionarJogador(int tipo, String cor) {
+		Jogador jogador = JogadorFactory.criarJogador(tipo, cor);
+		this.jogadores.add(jogador);
 	}
-
+	
+	public void adicionarCasa(int tipoCasa, int posicao) {
+		Casa casa = CasaFactory.criarCasa(tipoCasa, posicao);
+		this.casas.add(casa);
+	}
+	
 	public void limparJogadores() {
 		jogadores.clear();
 	}
-
+	
 	public boolean verificarCores(String cor) {
-		for (Jogadores j : jogadores) {
+		for (Jogador j : jogadores) {
 			if (j.getCor().equalsIgnoreCase(cor)) {
 				return true;
 			}
@@ -48,72 +57,66 @@ public class Tabuleiro {
 	}
 	
 	public boolean jogarRodada() {
-		System.out.println("\n========= RODADA " + numeroRodada + " ========="); // NOSONAR
-		for (Jogadores jogador : jogadores) {
+		System.out.println("\n========= RODADA " + numeroRodada + " =========");
+		for (Jogador jogador : jogadores) {
 			imprimirSeparadorRodada();
-			
 			if (verificarSeJogadorPerdeuRodada(jogador)) {
 				continue;
 			}
-			
 			if (processarJogadaCompleta(jogador)) {
-				return true; // Houve um ganhador
+				return true;
 			}
-			
 			pausarEntreJogadas();
 		}
-		
 		incrementarNumeroRodada();
 		return false;
 	}
 	
 	public void imprimirSeparadorRodada() {
-		System.out.println("<------------------------------------------------->"); // NOSONAR
+		System.out.println("<------------------------------------------------->");
 	}
 	
-	public boolean verificarSeJogadorPerdeuRodada(Jogadores jogador) {
+	public boolean verificarSeJogadorPerdeuRodada(Jogador jogador) {
 		if (jogador.getPerdeProximaJogada()) {
-			System.out.println("Jogador " + jogador.getCor() + " perdeu esta rodada!"); // NOSONAR
+			System.out.println("Jogador " + jogador.getCor() + " perdeu esta rodada!");
 			jogador.setPerdeProximaJogada(false);
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean processarJogadaCompleta(Jogadores jogador) {
-		if (processarMovimentoJogador(jogador)) {
-			return true;
-		}
+	public boolean processarJogadaCompleta(Jogador jogador) {
+		if (processarMovimentoJogador(jogador)) return true;
+		if (processarRodadasExtrasPorDadosIguais(jogador)) return true;
 		
-		return processarRodadasExtrasPorDadosIguais(jogador);
+		if (jogador.getJogaDeNovo()) {
+			jogador.setJogaDeNovo(false);
+			System.out.println("🔁 Jogador " + jogador.getCor() + " caiu numa casa de jogar de novo! Vai jogar outra vez.");
+			if (processarJogadaCompleta(jogador)) return true;
+		}
+		return false;
 	}
 	
-	public boolean processarMovimentoJogador(Jogadores jogador) {
+	public boolean processarMovimentoJogador(Jogador jogador) {
 		int posicaoAntes = jogador.getPosicaoTabuleiro();
 		jogador.atualizarJogador();
 		int posicaoDepois = jogador.getPosicaoTabuleiro();
-		
 		imprimirResultadoJogada(jogador, posicaoAntes, posicaoDepois);
-		
 		verificarCasaEspecial(jogador);
 		return verificarGanhador();
 	}
 	
-	public void imprimirResultadoJogada(Jogadores jogador, int posicaoAntes,
-								   int posicaoDepois) {
+	public void imprimirResultadoJogada(Jogador jogador, int posicaoAntes, int posicaoDepois) {
 		System.out.println("Jogador " + jogador.getCor() +
 				" está na rodada " + jogador.getJogadas() +
 				", avançou " + (posicaoDepois - posicaoAntes) +
-				" casas e está agora na posição " + posicaoDepois + "."); // NOSONAR
+				" casas e está agora na posição " + posicaoDepois + ".");
 	}
 	
-	public boolean processarRodadasExtrasPorDadosIguais(Jogadores jogador) {
+	public boolean processarRodadasExtrasPorDadosIguais(Jogador jogador) {
 		while (jogador.verificarDadosIguais()) {
-			System.out.println("🎲 Jogador " + jogador.getCor() + " tirou dados iguais! Joga novamente."); // NOSONAR
-			
-			if (processarMovimentoJogador(jogador)) {
-				return true;
-			}
+			System.out.println("🎲 Jogador " + jogador.getCor() + " tirou dados iguais! Joga novamente.");
+			if (processarMovimentoJogador(jogador)) return true;
 		}
 		return false;
 	}
@@ -122,7 +125,7 @@ public class Tabuleiro {
 		try {
 			Thread.sleep(1500);
 		} catch (InterruptedException e) {
-			System.out.println("Jogo interrompido!"); // NOSONAR
+			System.out.println("Jogo interrompido!");
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -130,133 +133,113 @@ public class Tabuleiro {
 	public void incrementarNumeroRodada() {
 		numeroRodada++;
 	}
-
+	
 	public boolean verificarGanhador() {
 		for (int i = 0; i < jogadores.size(); i++) {
-			Jogadores jogador = jogadores.get(i);
-			if (jogador.getPosicaoTabuleiro() >= 40) {
-				System.out.println("O jogador " + jogador.getCor() + " ganhou a partida em " + jogador.getJogadas() + " rodadas!"); // NOSONAR
-
-				System.out.println("\n--- RESUMO FINAL DOS JOGADORES ---"); // NOSONAR
-				for (int j = 0; j < jogadores.size(); j++) {
-					System.out.println("Jogador " + jogadores.get(j).getCor() + " - " +
-							"Posição : " + jogadores.get(j).getPosicaoTabuleiro() + " -" +
-							" " +
-							"Rodadas jogadas: " + jogadores.get(j).getJogadas()); // NOSONAR
+			Jogador jogador = jogadores.get(i);
+			if (jogador.getPosicaoTabuleiro() >= casas.size()) {
+				System.out.println("O jogador " + jogador.getCor() + " ganhou a partida em " + jogador.getJogadas() + " rodadas!");
+				System.out.println("\n--- RESUMO FINAL DOS JOGADORES ---");
+				for (Jogador j : jogadores) {
+					System.out.println("Jogador " + j.getCor() +
+							" - Posição : " + j.getPosicaoTabuleiro() +
+							" - Rodadas jogadas: " + j.getJogadas());
 				}
-
 				return true;
 			}
 		}
 		return false;
 	}
-
-	private boolean contem(int valor, int[] array) {
-		for (int i : array) {
-			if (i == valor) return true;
+	
+	public Casa getCasaNaPosicao(int posicao) {
+		if (posicao > 0 && posicao <= casas.size()) {
+			return casas.get(posicao - 1);
 		}
-		return false;
+		return null;
 	}
 	
-	public void verificarCasaEspecial(Jogadores jogador) {
-		int posicao = jogador.getPosicaoTabuleiro();
+	public void verificarCasaEspecial(Jogador jogador) {
+		Casa casaAtual = getCasaNaPosicao(jogador.getPosicaoTabuleiro());
+		if (casaAtual == null) return;
 		
-		verificarPerdaRodada(jogador, posicao);
-		verificarMudancaTipo(jogador, posicao);
-		verificarGanhoPosicoes(jogador, posicao);
-		verificarCasaMagica(jogador, posicao);
-		verificarRetrocederAdversario(jogador, posicao);
+		
+		EfeitoDaCasa efeito = processarCasa(casaAtual, jogador, teclado);
+		TabuleiroConsole.exibirMensagem(efeito);
+		
 	}
 	
-	private void verificarPerdaRodada(Jogadores jogador, int posicao) {
-		if (contem(posicao, perdeRodada)) {
-			System.out.println("Jogador " + jogador.getCor() + " caiu na casa " + posicao +
-					", por isso, não joga a próxima rodada"); // NOSONAR
-			jogador.setPerdeProximaJogada(true);
+	public EfeitoDaCasa processarCasa(Casa casa, Jogador jogador, Scanner teclado) {
+		if (casa instanceof CasaRetroceder) {
+			return processarCasaRetroceder((CasaRetroceder) casa, jogador, teclado);
+		}
+		if (casa instanceof CasaSurpresa) {
+			return processarCasaSurpresa((CasaSurpresa) casa, jogador, teclado);
+		}
+		if (casa instanceof CasaReversa) {
+			return processarCasaReversa((CasaReversa) casa, jogador);
+		}
+		return casa.aplicarRegra(jogador, jogadores, 0);
+	}
+	
+	public EfeitoDaCasa processarCasaRetroceder(CasaRetroceder casa, Jogador jogador, Scanner teclado) {
+		List<Jogador> adversarios = obterAdversarios(jogador);
+		exibirOpcoesAdversarios(adversarios);
+		int escolha = obterEscolhaValida(teclado, adversarios.size());
+		return aplicarRegraRetroceder(casa, jogador, adversarios, escolha);
+	}
+	
+	public EfeitoDaCasa aplicarRegraRetroceder(CasaRetroceder casa, Jogador jogador, List<Jogador> adversarios, int escolha) {
+		Jogador escolhido = adversarios.get(escolha - 1);
+		int indiceReal = jogadores.indexOf(escolhido);
+		return casa.aplicarRegra(jogador, jogadores, indiceReal);
+	}
+	
+	public EfeitoDaCasa processarCasaSurpresa(CasaSurpresa casa, Jogador jogador, Scanner teclado) {
+		int escolha = obterEscolhaSurpresa(teclado, jogador);
+		validarJogadorPresente(jogador);
+		return casa.aplicarRegra(jogador, jogadores, escolha);
+	}
+	
+	public int obterEscolhaSurpresa(Scanner teclado, Jogador jogador) {
+		int escolha;
+		do {
+			System.out.println("Jogador " + jogador.getCor() + ", escolha a carta surpresa (1, 2, 3):");
+			escolha = teclado.nextInt();
+		} while (escolha < 1 || escolha > 3);
+		return escolha;
+	}
+	
+	public void validarJogadorPresente(Jogador jogador) {
+		if (!jogadores.contains(jogador)) {
+			throw new IllegalStateException("Jogador " + jogador.getCor() + " não encontrado!");
 		}
 	}
 	
-	private void verificarMudancaTipo(Jogadores jogador, int posicao) {
-		if (contem(posicao, mudaTipoJogador)) {
-			Scanner teclado = new Scanner(System.in);
-			System.out.println("Jogador " + jogador.getCor() +
-					", você terá que mudar de tipo, pois caiu na casa " + posicao + "."); // NOSONAR
-			System.out.println("Escolha a carta surpresa (1, 2, 3):"); // NOSONAR
-			int numero = teclado.nextInt();
-			
-			Jogadores novoJogador = jogador.mudarTipoJogadorPara(numero);
-			int index = jogadores.indexOf(jogador);
-			jogadores.set(index, novoJogador);
-			
-			System.out.println("Jogador " + novoJogador.getCor() +
-					" mudou para o tipo " + novoJogador.getClass().getSimpleName()); // NOSONAR
+	public EfeitoDaCasa processarCasaReversa(CasaReversa casa, Jogador jogador) {
+		int indiceUltimo = encontrarIndiceUltimoJogador(jogador);
+		if (indiceUltimo == -1) {
+			return new EfeitoDaCasa("Nenhum outro jogador para trocar posições!");
 		}
+		return casa.aplicarRegra(jogador, jogadores, indiceUltimo);
 	}
 	
-	private void verificarGanhoPosicoes(Jogadores jogador, int posicao) {
-		if (contem(posicao, ganhaTresPosicoes)) {
-			if (!(jogador instanceof JogadorAzarado)) {
-				System.out.println("Jogador " + jogador.getCor() +
-						" ganhou 3 posições, pois caiu na casa " + posicao + "."); // NOSONAR
-				jogador.setPosicaoTabuleiro(jogador.getPosicaoTabuleiro() + 3);
-			} else {
-				System.out.println("Jogador " + jogador.getCor() +
-						" deveria ganhar 3 pontos extras por estar na casa " + posicao +
-						", mas o tipo de jogador é Azarado e por isso não ganha as 3 posições extras"); // NOSONAR
-			}
-		}
-	}
 	
-	private void verificarCasaMagica(Jogadores jogador, int posicao) {
-		if (contem(posicao, casasMagicas)) {
-			Jogadores ultimoJogador = encontrarUltimoJogador(jogador);
-			
-			if (ultimoJogador != null) {
-				int posicaoAtual = jogador.getPosicaoTabuleiro();
-				int posicaoUltimo = ultimoJogador.getPosicaoTabuleiro();
-				
-				jogador.setPosicaoTabuleiro(posicaoUltimo);
-				ultimoJogador.setPosicaoTabuleiro(posicaoAtual);
-				
-				System.out.println("Jogador " + jogador.getCor() + " caiu na casa " + posicaoAtual +
-						" e trocou de posição com o último jogador, que é o jogador " + ultimoJogador.getCor()); // NOSONAR
-			}
-		}
-	}
-	
-	private Jogadores encontrarUltimoJogador(Jogadores jogadorAtual) {
-		Jogadores ultimoJogador = null;
+	public int encontrarIndiceUltimoJogador(Jogador jogadorAtual) {
+		int indiceUltimo = -1;
 		int menorPosicao = Integer.MAX_VALUE;
-		
-		for (Jogadores jogador : jogadores) {
+		for (int i = 0; i < jogadores.size(); i++) {
+			Jogador jogador = jogadores.get(i);
 			if (jogador != jogadorAtual && jogador.getPosicaoTabuleiro() < menorPosicao) {
 				menorPosicao = jogador.getPosicaoTabuleiro();
-				ultimoJogador = jogador;
+				indiceUltimo = i;
 			}
 		}
-		return ultimoJogador;
+		return indiceUltimo;
 	}
 	
-	private void verificarRetrocederAdversario(Jogadores jogador, int posicao) {
-		if (contem(posicao, retrocederOutro)) {
-			Scanner teclado = new Scanner(System.in);
-			System.out.println("Jogador " + jogador.getCor() + " caiu na casa " + posicao +
-					" e pode escolher um adversário para voltar ao início do jogo (casa 0)."); // NOSONAR
-			
-			List<Jogadores> adversarios = obterAdversarios(jogador);
-			exibirOpcoesAdversarios(adversarios);
-			
-			int escolha = obterEscolhaValida(teclado, adversarios.size());
-			Jogadores escolhido = adversarios.get(escolha - 1);
-			
-			escolhido.setPosicaoTabuleiro(0);
-			System.out.println("Jogador " + escolhido.getCor() + " foi escolhido e voltou para a casa 0."); // NOSONAR
-		}
-	}
-	
-	private List<Jogadores> obterAdversarios(Jogadores jogadorAtual) {
-		List<Jogadores> adversarios = new ArrayList<>();
-		for (Jogadores j : jogadores) {
+	private List<Jogador> obterAdversarios(Jogador jogadorAtual) {
+		List<Jogador> adversarios = new ArrayList<>();
+		for (Jogador j : jogadores) {
 			if (j != jogadorAtual) {
 				adversarios.add(j);
 			}
@@ -264,71 +247,52 @@ public class Tabuleiro {
 		return adversarios;
 	}
 	
-	private void exibirOpcoesAdversarios(List<Jogadores> adversarios) {
+	private void exibirOpcoesAdversarios(List<Jogador> adversarios) {
 		for (int i = 0; i < adversarios.size(); i++) {
 			System.out.println((i + 1) + " - Jogador " + adversarios.get(i).getCor() +
-					" (posição: " + adversarios.get(i).getPosicaoTabuleiro() + ")"); // NOSONAR
+					" (posição: " + adversarios.get(i).getPosicaoTabuleiro() + ")");
 		}
 	}
 	
 	private int obterEscolhaValida(Scanner teclado, int maxOpcoes) {
 		int escolha;
 		do {
-			System.out.print("Escolha o número do adversário que voltará para a casa 0: "); // NOSONAR
+			System.out.print("Escolha o número do adversário que voltará para a casa 0: ");
 			escolha = teclado.nextInt();
 		} while (escolha < 1 || escolha > maxOpcoes);
 		return escolha;
 	}
-
+	
 	public boolean jogarRodadaDebug(Scanner teclado) {
-		System.out.println("\n========= RODADA " + numeroRodada + " ========="); // NOSONAR
-
+		System.out.println("\n========= RODADA " + numeroRodada + " =========");
 		for (int i = 0; i < jogadores.size(); i++) {
-			System.out.println("<------------------------------------------------->"); // NOSONAR
-			Jogadores jogador = jogadores.get(i);
-
-			System.out.println("É a vez do jogador " + jogador.getCor() + ", ele está " +
-					"na " +
-					"posição: " + jogador.getPosicaoTabuleiro()); // NOSONAR
+			System.out.println("<------------------------------------------------->");
+			Jogador jogador = jogadores.get(i);
+			System.out.println("É a vez do jogador " + jogador.getCor() + ", ele está na posição: " + jogador.getPosicaoTabuleiro());
 			
 			int novaPosicao;
 			do {
-				System.out.print("Digite o número da casa que o jogador deve ir: "); // NOSONAR
+				System.out.print("Digite o número da casa que o jogador deve ir: ");
 				novaPosicao = teclado.nextInt();
-				
 				if (novaPosicao < jogador.getPosicaoTabuleiro()) {
-					System.out.println("Não é permitido voltar casas. Tente novamente."); // NOSONAR
+					System.out.println("Não é permitido voltar casas. Tente novamente.");
 				}
 			} while (novaPosicao < jogador.getPosicaoTabuleiro());
-			
-			
 			
 			int posicaoAntes = jogador.getPosicaoTabuleiro();
 			jogador.setPosicaoTabuleiro(novaPosicao);
 			int avancou = novaPosicao - posicaoAntes;
 			jogador.setJogadas(jogador.getJogadas() + 1);
-
+			
 			System.out.println("Jogador " + jogador.getCor() +
 					" está na rodada " + jogador.getJogadas() +
 					", avançou " + avancou +
-					" casas e está agora na posição " + novaPosicao + "."); // NOSONAR
-
+					" casas e está agora na posição " + novaPosicao + ".");
+			
 			verificarCasaEspecial(jogador);
-
-			if (verificarGanhador()) {
-				return true;
-			}
+			if (verificarGanhador()) return true;
 		}
-
 		numeroRodada++;
 		return false;
 	}
-	
-	public ArrayList<Jogadores> getJogadores() {
-		return this.jogadores;
-	}
-
 }
-
-
-
