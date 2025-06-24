@@ -1,6 +1,6 @@
 package src.main.jogador;
 
-public class JogadorNormal extends Jogadores{
+public class JogadorNormal extends Jogador {
 	
 	
 	public JogadorNormal(String cor){
