@@ -49,8 +49,6 @@ public abstract class Jogador {
 	}
 
 	
-
-	// Getters and Setters
 	public int getJogadas() {
 		return jogadas;
 	}

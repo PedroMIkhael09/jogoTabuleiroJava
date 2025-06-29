@@ -19,4 +19,9 @@ public class CasaDaSorte extends Casa {
 		}
 		return new EfeitoDaCasa("Jogador " + jogador.getCor() + " é azarado e não teve sorte nesta casa.");
 	}
+	
+	@Override
+	public String getTipo() {
+		return "Casa da sorte";
+	}
 }

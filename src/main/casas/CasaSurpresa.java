@@ -19,4 +19,9 @@ public class CasaSurpresa extends Casa {
 		String tipoNovo = novoJogador.getClass().getSimpleName();
 		return new EfeitoDaCasa("Jogador " + novoJogador.getCor() + " mudou de tipo: de " + tipoAntigo + " para " + tipoNovo + ".");
 	}
+	
+	@Override
+	public String getTipo() {
+		return "Casa surpresa";
+	}
 }

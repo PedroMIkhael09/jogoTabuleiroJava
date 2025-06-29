@@ -17,5 +17,10 @@ public class CasaPrisao extends Casa {
 				"jogada!");
 	}
 	
+	@Override
+	public String getTipo() {
+		return "Casa prisão";
+	}
+	
 	
 }

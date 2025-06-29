@@ -15,4 +15,9 @@ public class CasaSimples extends Casa {
 		// Não faz nada, casa normal
 		return new EfeitoDaCasa("Casa normal - sem efeito especial para o jogador " + jogador.getCor() + ".");
 	}
+	
+	@Override
+	public String getTipo() {
+		return "Casa simples";
+	}
 }

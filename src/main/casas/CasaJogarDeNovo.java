@@ -16,5 +16,8 @@ public class CasaJogarDeNovo extends Casa {
 	}
 	
 	
-	
+	@Override
+	public String getTipo() {
+		return "Casa para jogar de novo";
+	}
 }
