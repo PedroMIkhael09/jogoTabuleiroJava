@@ -1,23 +1,25 @@
 package src.main.visao;
 
+import src.main.jogador.Jogador;
 import src.main.jogo.Tabuleiro;
 import src.main.mensagem.EfeitoDaCasa;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class TabuleiroConsole {
+public class Jogo {
 	
 	private final Tabuleiro tabuleiro;
 	private final Scanner teclado;
 	
-	public TabuleiroConsole() {
-		this.tabuleiro = Tabuleiro.getInstacia();
+	public Jogo() {
+		this.tabuleiro = Tabuleiro.getInstancia();
 		this.teclado = new Scanner(System.in);
 	}
 	
 	public void jogar() {
 		exibirMensagem("Seja bem-vindo ao jogo de Tabuleiro!!");
+		configurarTabuleiro();
 		
 		int modo = selecionarModo();
 		if (modo == 1 || modo == 2) {
@@ -46,7 +48,9 @@ public class TabuleiroConsole {
 		}
 	}
 	
-	public boolean montarTabuleiro(int qtdCasas) {
+	public boolean configurarTabuleiro() {
+		exibirMensagem("Quantas casas queremos no tabuleiro?");
+		int qtdCasas = teclado.nextInt();
 		exibirMensagem("Vamos montar o tabuleiro com " + qtdCasas + " casas!");
 		imprimirDescricaoDasCasas();
 		
@@ -108,6 +112,7 @@ public class TabuleiroConsole {
 				case 1 -> contadorAzarados++;
 				case 2 -> contadorSortudos++;
 				case 3 -> contadorNormais++;
+				default -> throw new IllegalStateException("Unexpected value: " + tipoJogador);
 			}
 		}
 		
@@ -166,16 +171,18 @@ public class TabuleiroConsole {
 		while (!jogoFinalizado) {
 			jogoFinalizado = tabuleiro.jogarRodada();
 		}
+		exibirEstadoDoTabuleiro();
 	}
 	
 	private void executarModoDebug() {
 		boolean jogoFinalizado = false;
 		while (!jogoFinalizado) {
 			jogoFinalizado = tabuleiro.jogarRodadaDebug(teclado);
+			
 		}
+		exibirEstadoDoTabuleiro();
 	}
 	
-	// Métodos utilitários para leitura de dados e mensagens
 	
 	private int lerInt(String mensagem) {
 		while (true) {
@@ -184,11 +191,11 @@ public class TabuleiroConsole {
 			}
 			try {
 				int valor = teclado.nextInt();
-				teclado.nextLine(); // consumir quebra de linha
+				teclado.nextLine();
 				return valor;
 			} catch (InputMismatchException e) {
 				exibirMensagem("Entrada inválida! Digite um número inteiro.");
-				teclado.nextLine(); // limpar buffer
+				teclado.nextLine();
 			}
 		}
 	}
@@ -201,4 +208,83 @@ public class TabuleiroConsole {
 	private void exibirMensagem(String mensagem) {
 		System.out.println(mensagem);
 	}
+	
+	public void exibirEstadoDoTabuleiro() {
+		System.out.println("\n=== POSIÇÃO DOS JOGADORES NO TABULEIRO ===");
+		
+		exibirLinhaTabuleiro();
+		exibirSimbolosForaDoTabuleiro();
+		exibirLegenda();
+	}
+	
+	private void exibirLinhaTabuleiro() {
+		int totalCasas = tabuleiro.casas.size();
+		System.out.print("Tabuleiro: ");
+		
+		for (int i = 1; i <= totalCasas; i++) {
+			String simbolosNaCasa = obterSimbolosNaCasa(i, totalCasas);
+			if (simbolosNaCasa.isEmpty()) {
+				System.out.printf("[%-2d] ", i);
+			} else {
+				System.out.printf("[%02d%s] ", i, simbolosNaCasa);
+			}
+		}
+		System.out.println();
+	}
+	
+	private String obterSimbolosNaCasa(int casa, int totalCasas) {
+		StringBuilder simbolos = new StringBuilder();
+		for (Jogador jogador : tabuleiro.jogadores) {
+			int posicao = jogador.getPosicaoTabuleiro() > totalCasas ? totalCasas + 1 : jogador.getPosicaoTabuleiro();
+			if (posicao == casa) {
+				simbolos.append(gerarSimboloPorCor(jogador.getCor()));
+			}
+		}
+		return simbolos.toString();
+	}
+	
+	private void exibirSimbolosForaDoTabuleiro() {
+		int totalCasas = tabuleiro.casas.size();
+		StringBuilder simbolosFinal = new StringBuilder();
+		boolean temVencedor = false;
+		for (Jogador j : tabuleiro.jogadores) {
+			if (j.getPosicaoTabuleiro() > totalCasas) {
+				simbolosFinal.append(gerarSimboloPorCor(j.getCor()));
+				temVencedor = true;
+			}
+		}
+		if (temVencedor) {
+			System.out.printf("[FIM%s] ", simbolosFinal.toString());
+			System.out.println();
+		}
+	}
+	
+	private void exibirLegenda() {
+		System.out.println("\nLegenda:");
+		for (Jogador j : tabuleiro.jogadores) {
+			System.out.println(" " + gerarSimboloPorCor(j.getCor()) + " = " + capitalize(j.getCor()));
+		}
+		System.out.println();
+	}
+	
+	
+	private String capitalize(String str) {
+		if (str == null || str.isEmpty()) return str;
+		return str.substring(0,1).toUpperCase() + str.substring(1).toLowerCase();
+	}
+	
+	
+	
+	private String gerarSimboloPorCor(String cor) {
+		return switch (cor.toLowerCase()) {
+			case "vermelho" -> "🔴";
+			case "azul"     -> "🔵";
+			case "preto"    -> "⚫";
+			case "branco"   -> "⚪";
+			case "ciano"    -> "🔷";
+			default         -> "❔"; // símbolo genérico
+		};
+	}
+	
+	
 }

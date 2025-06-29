@@ -19,4 +19,9 @@ public class CasaDoAzar extends Casa {
 		}
 		return new EfeitoDaCasa("Jogador " + jogador.getCor() + " é sortudo e escapou do azar!");
 	}
+	
+	@Override
+	public String getTipo() {
+		return "Casa do azar";
+	}
 }

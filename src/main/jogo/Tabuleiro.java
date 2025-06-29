@@ -8,15 +8,15 @@ import src.main.factory.CasaFactory;
 import src.main.factory.JogadorFactory;
 import src.main.jogador.Jogador;
 import src.main.mensagem.EfeitoDaCasa;
-import src.main.visao.TabuleiroConsole;
+import src.main.visao.Jogo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Tabuleiro {
-	protected ArrayList<Jogador> jogadores;
-	protected ArrayList<Casa> casas;
+	public ArrayList<Jogador> jogadores;
+	public ArrayList<Casa> casas;
 	private int numeroRodada = 1;
 	private static Tabuleiro instancia;
 	private Scanner teclado = new Scanner(System.in);
@@ -26,7 +26,7 @@ public class Tabuleiro {
 		this.casas = new ArrayList<>();
 	}
 	
-	public static Tabuleiro getInstacia() {
+	public static Tabuleiro getInstancia() {
 		if (instancia == null) {
 			instancia = new Tabuleiro();
 		}
@@ -135,12 +135,16 @@ public class Tabuleiro {
 	}
 	
 	public boolean verificarGanhador() {
-		for (int i = 0; i < jogadores.size(); i++) {
-			Jogador jogador = jogadores.get(i);
+		for (Jogador jogador : jogadores) {
 			if (jogador.getPosicaoTabuleiro() >= casas.size()) {
 				System.out.println("O jogador " + jogador.getCor() + " ganhou a partida em " + jogador.getJogadas() + " rodadas!");
 				System.out.println("\n--- RESUMO FINAL DOS JOGADORES ---");
-				for (Jogador j : jogadores) {
+				
+				List<Jogador> jogadoresOrdenados = new ArrayList<>(jogadores);
+				
+				jogadoresOrdenados.sort((j1, j2) -> Integer.compare(j2.getPosicaoTabuleiro(), j1.getPosicaoTabuleiro()));
+				
+				for (Jogador j : jogadoresOrdenados) {
 					System.out.println("Jogador " + j.getCor() +
 							" - Posição : " + j.getPosicaoTabuleiro() +
 							" - Rodadas jogadas: " + j.getJogadas());
@@ -150,6 +154,7 @@ public class Tabuleiro {
 		}
 		return false;
 	}
+	
 	
 	public Casa getCasaNaPosicao(int posicao) {
 		if (posicao > 0 && posicao <= casas.size()) {
@@ -164,7 +169,7 @@ public class Tabuleiro {
 		
 		
 		EfeitoDaCasa efeito = processarCasa(casaAtual, jogador, teclado);
-		TabuleiroConsole.exibirMensagem(efeito);
+		Jogo.exibirMensagem(efeito);
 		
 	}
 	

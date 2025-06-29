@@ -19,4 +19,9 @@ public class CasaRetroceder extends Casa {
 		escolhido.setPosicaoTabuleiro(0);
 		return new EfeitoDaCasa("Jogador " + escolhido.getCor() + " foi obrigado a voltar para a casa 0 pelo jogador " + jogador.getCor() + ".");
 	}
+	
+	@Override
+	public String getTipo() {
+		return "Casa retroceder";
+	}
 }

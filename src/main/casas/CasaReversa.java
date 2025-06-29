@@ -24,4 +24,9 @@ public class CasaReversa extends Casa {
 		
 		return new EfeitoDaCasa("Jogador " + jogadorAtual.getCor() + " trocou de posição com jogador " + ultimoJogador.getCor() + ".");
 	}
+	
+	@Override
+	public String getTipo() {
+		return "Casa reversa";
+	}
 }
