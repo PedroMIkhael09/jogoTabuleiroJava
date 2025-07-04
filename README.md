@@ -1,50 +1,82 @@
-# Jogo de Tabuleiro — Projeto de Programação Orientada a Objetos (POO)
+# 🎲 Jogo de Tabuleiro — Projeto de Programação Orientada a Objetos (POO)
 
-Este projeto é uma implementação em Java de um jogo de tabuleiro desenvolvido como parte da disciplina de Programação Orientada a Objetos. O jogo simula um tabuleiro com 40 casas e permite até seis jogadores, que possuem diferentes perfis de comportamento: sortudo, azarado e normal. Cada jogador avança conforme a soma obtida no lançamento de dois dados.
-
-## Funcionalidades
-
-- Tabuleiro composto por 40 casas.
-- Até 6 jogadores simultâneos, cada um com cor e tipo definidos pelo usuário.
-- Regras específicas para movimentação, incluindo jogadas extras ao tirar dados iguais.
-- Casas com efeitos especiais que alteram a dinâmica do jogo.
-- Modo debug para facilitar testes e validação dos comportamentos.
-
-## Regras do jogo
-
-- O objetivo é ser o primeiro a alcançar ou ultrapassar a casa 40.
-- Se um jogador tirar dois dados iguais, ganha uma jogada extra.
-- Algumas casas no tabuleiro aplicam efeitos específicos:
-
-| Tipo de Casa          | Casas      | Descrição                                            |
-|-----------------------|------------|-----------------------------------------------------|
-| Perde rodada          | 10, 25, 38 | Jogador perde a próxima rodada.                      |
-| Surpresa              | 13         | Jogador muda aleatoriamente seu tipo (sortudo, azarado, normal). |
-| Sorte                 | 5, 15, 30  | Jogadores (exceto azarados) avançam 3 casas extras. |
-| Retroceder adversário | 17, 27     | Jogador escolhe um adversário para voltar à casa 0. |
-| Casa mágica           | 20, 35     | Troca de posição com o jogador que estiver mais atrás (exceto se estiver em último). |
-
-## Tipos de jogadores
-
-- **Sortudo**: Sempre obtém soma dos dados igual ou maior que 7.
-- **Azarado**: Sempre obtém soma dos dados igual ou menor que 6.
-- **Normal**: Soma dos dados varia livremente entre 2 e 12.
-
-## Aspectos técnicos
-
-- Implementação orientada a objetos, com uso de herança e polimorfismo para diferenciar comportamentos dos jogadores.
-- Controle de estado e regras encapsulados para garantir integridade dos dados.
-- Utilização de `ArrayList` para gerenciamento dos jogadores.
-- Sistema de debug que permite controle manual do avanço dos jogadores para facilitar testes específicos.
-
-## Finalização
-
-Ao final do jogo, o sistema apresenta:
-
-- O vencedor da partida.
-- A quantidade de jogadas realizadas por cada jogador.
-- A posição final de todos os participantes.
+Este projeto é uma implementação em Java de um **jogo de tabuleiro** desenvolvido para a disciplina de **Programação Orientada a Objetos**. A versão atual passou por uma **refatoração completa**, incorporando **boas práticas de desenvolvimento** e **padrões de projeto**, o que melhorou significativamente sua **estrutura, legibilidade e manutenibilidade**.
 
 ---
 
-Esse projeto serviu para consolidar conceitos de POO e práticas de desenvolvimento em Java, além de proporcionar uma experiência prática na implementação de regras complexas de jogos de tabuleiro.
+## 🧩 Funcionalidades
+
+- 🔧 Criação de um **tabuleiro totalmente personalizável**, com definição do número de casas e tipos de efeito.
+- 🎮 Suporte para **até 6 jogadores**, com **cores** e **tipos personalizados**.
+- 🎲 **Sistema de movimentação com regras especiais**, como jogadas extras ao tirar dados iguais.
+- 🏠 **7 tipos de casas especiais** com efeitos diversos que alteram a dinâmica do jogo.
+- 🧪 Modo de jogo **normal** e **debug** (para testes e validações).
+
+---
+
+## 📜 Regras do Jogo
+
+- O **objetivo** é ser o **primeiro jogador** a **alcançar ou ultrapassar a última casa** do tabuleiro.
+- Ao tirar **dois dados iguais**, o jogador ganha **uma jogada extra**.
+- As casas podem conter **efeitos especiais**, conforme a configuração inicial:
+
+| Tipo da Casa           | Efeito                                                                 |
+|------------------------|------------------------------------------------------------------------|
+| **Perde Rodada**       | Jogador perde a próxima rodada.                                        |
+| **Surpresa**           | Jogador muda aleatoriamente seu tipo (Sortudo, Azarado ou Normal).     |
+| **Sorte**              | Jogadores (exceto Azarados) avançam 3 casas extras.                    |
+| **Retroceder Adversário** | Jogador escolhe um adversário para voltar à casa 0.               |
+| **Casa Mágica**        | Troca de posição com o jogador que estiver mais atrás (exceto se já for o último). |
+| **Jogar de Novo**      | O jogador tem direito a uma nova jogada.                               |
+| **Azar**               | O jogador volta 3 casas.                                               |
+
+---
+
+## 🧠 Tipos de Jogadores
+
+| Tipo      | Comportamento ao lançar os dados                       |
+|-----------|--------------------------------------------------------|
+| **Sortudo**  | Soma dos dados ≥ 7                                    |
+| **Azarado** | Soma dos dados ≤ 6                                    |
+| **Normal**  | Soma dos dados varia normalmente entre 2 e 12         |
+
+---
+
+## 🏗️ Arquitetura e Padrões de Projeto
+
+O projeto foi cuidadosamente estruturado com base nos **princípios SOLID** e utilização dos seguintes **padrões de projeto**:
+
+- **Facade**: A classe `Jogo` atua como fachada, centralizando a lógica do jogo e simplificando a `Main`.
+- **Singleton**: A classe `Tabuleiro` garante uma única instância durante toda a execução.
+- **Factory Method**: Usado para criar dinamicamente os objetos `Jogador` e `Casa`, desacoplando lógica de construção.
+- **Strategy (Polimorfismo)**: Cada `Casa` implementa seu comportamento através do método abstrato `aplicarRegra()`.
+
+---
+
+## ✅ Qualidade do Código
+
+Utilizamos o **SonarQube** para garantir a qualidade do código. Os principais resultados após a refatoração:
+
+- 🔁 **Redução de duplicações**.
+- 🧹 **Diminuição significativa de "code smells"**.
+- 🐞 **Nenhum bug ou vulnerabilidade identificados**.
+- ✅ Aprovado no **Quality Gate**.
+
+---
+
+## 🚀 Como Executar o Projeto
+
+1. **Clone** este repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/jogo-tabuleiro.git
+   ```
+2. **Abra** o projeto em sua IDE Java de preferência (ex: IntelliJ, Eclipse).
+3. **Compile** todos os arquivos.
+4. **Execute** a classe `Main.java` para iniciar o jogo.
+
+---
+
+## 👥 Autores
+
+- **Pedro Mikhael Maia de Souza**
+- **Victor Araújo Silva**
