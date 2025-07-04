@@ -4,7 +4,7 @@ Este projeto é uma implementação em Java de um **jogo de tabuleiro** desenvol
 
 ---
 
-## 🧩 Funcionalidades
+## Funcionalidades
 
 - 🔧 Criação de um **tabuleiro totalmente personalizável**, com definição do número de casas e tipos de efeito.
 - 🎮 Suporte para **até 6 jogadores**, com **cores** e **tipos personalizados**.
@@ -14,7 +14,7 @@ Este projeto é uma implementação em Java de um **jogo de tabuleiro** desenvol
 
 ---
 
-## 📜 Regras do Jogo
+## Regras do Jogo
 
 - O **objetivo** é ser o **primeiro jogador** a **alcançar ou ultrapassar a última casa** do tabuleiro.
 - Ao tirar **dois dados iguais**, o jogador ganha **uma jogada extra**.
@@ -32,7 +32,7 @@ Este projeto é uma implementação em Java de um **jogo de tabuleiro** desenvol
 
 ---
 
-## 🧠 Tipos de Jogadores
+## Tipos de Jogadores
 
 | Tipo      | Comportamento ao lançar os dados                       |
 |-----------|--------------------------------------------------------|
@@ -42,7 +42,7 @@ Este projeto é uma implementação em Java de um **jogo de tabuleiro** desenvol
 
 ---
 
-## 🏗️ Arquitetura e Padrões de Projeto
+##  Arquitetura e Padrões de Projeto
 
 O projeto foi cuidadosamente estruturado com base nos **princípios SOLID** e utilização dos seguintes **padrões de projeto**:
 
@@ -53,7 +53,7 @@ O projeto foi cuidadosamente estruturado com base nos **princípios SOLID** e ut
 
 ---
 
-## ✅ Qualidade do Código
+## Qualidade do Código
 
 Utilizamos o **SonarQube** para garantir a qualidade do código. Os principais resultados após a refatoração:
 
@@ -64,7 +64,7 @@ Utilizamos o **SonarQube** para garantir a qualidade do código. Os principais r
 
 ---
 
-## 🚀 Como Executar o Projeto
+## Como Executar o Projeto
 
 1. **Clone** este repositório:
    ```bash
@@ -76,7 +76,7 @@ Utilizamos o **SonarQube** para garantir a qualidade do código. Os principais r
 
 ---
 
-## 👥 Autores
+## Autores
 
 - **Pedro Mikhael Maia de Souza**
 - **Victor Araújo Silva**
